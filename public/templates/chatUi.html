@@ -1,0 +1,19 @@
+<div position="relative">
+    <div class="participantsArea">
+        <div ng-repeat="participant in participants">
+            <div class="participant">{{participant.displayName}}</div>
+            <img src="images/kitura-bird.svg" height="15px" width="20px"
+                style="vertical-align: middle;" ng-show="participant.typing"/>
+        </div>
+    </div>
+
+    <div class="splitter"></div>
+
+    <div class="messagesArea" style="border:2px solid purple;"></div>
+
+    <div class="inputAreaSplitter"></div>
+
+    <div class="inputArea">
+        <textarea style="height: 100%; width: 100%;"></textarea>
+    </div>
+</div>
