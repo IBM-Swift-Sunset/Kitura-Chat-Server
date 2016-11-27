@@ -117,7 +117,10 @@ app.controller("chat-controller", function($scope) {
         $('.coverFrame').hide();
         $('.displayNameArea').hide();
 
-        $scope.client = setupWebSocketClient($scope);
+        try {
+            $scope.client = setupWebSocketClient($scope);
+        }
+        catch(error) {}
     };
 
     var typingStopped = function() {
