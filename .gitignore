@@ -1,0 +1,8 @@
+.build
+build
+.vagrant
+Packages
+node_modules
+*.pkg
+KituraChatServer.xcodeproj
+*.DS_Store
