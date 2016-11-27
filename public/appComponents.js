@@ -78,6 +78,26 @@ var setupWebSocketClient = function($scope) {
                     var messagesArea = $('.messagesArea');
                     messagesArea.html(messagesArea.html() + snippet);
                     break;
+
+                case 'S':
+                    for (var i=0  ;  i < $scope.participants.length  ;  i++) {
+                        if (parts[1] == $scope.participants[i].displayName) {
+                            $scope.participants[i].typing = false;
+                            $scope.$apply();
+                            break;
+                        }
+                    }
+                    break;
+
+                case 'T':
+                    for (var i=0  ;  i < $scope.participants.length  ;  i++) {
+                        if (parts[1] == $scope.participants[i].displayName) {
+                            $scope.participants[i].typing = true;
+                            $scope.$apply();
+                            break;
+                        }
+                    }
+                    break;
             }
         }
     };
@@ -91,6 +111,7 @@ var app = angular.module('chat-client', []);
 app.controller("chat-controller", function($scope) {
     $scope.participants = [];
     $scope.displayName = "";
+    $scope.isTyping = 0;
 
     $scope.displayNameEntered = function() {
         $('.coverFrame').hide();
@@ -99,14 +120,30 @@ app.controller("chat-controller", function($scope) {
         $scope.client = setupWebSocketClient($scope);
     };
 
+    var typingStopped = function() {
+        $scope.client.send('S:' + $scope.displayName);
+        clearTimeout($scope.isTyping);
+        $scope.isTyping = 0;
+    };
+
     $scope.inputAreaInput = function(event) {
         var key = event.key || event.keyCode;
         if (key == 'Enter' && !event.cntrlKey && !event.shiftKey) {
+            typingStopped();
             var inputAreaField = $('#inputAreaField');
             var text = inputAreaField.val();
             $scope.client.send('M:' + $scope.displayName + ':' + text);
             event.preventDefault();
             inputAreaField.val('');
+        }
+        else {
+            if ($scope.isTyping) {
+                clearTimeout($scope.isTyping);
+            }
+            else {
+                $scope.client.send('T:' + $scope.displayName)
+            }
+            $scope.isTyping = setTimeout(typingStopped, 5000);
         }
     }
 })
@@ -119,13 +156,6 @@ app.directive("chatUi", function() {
             utilities.resizeUI();
         }
     }
-})
-
-app.directive("chatParticipants", function() {
-    return {
-        restrict: "E",
-        templateUrl: "templates/chatParticipants.html"
-    }
-})
+});
 
 })()
