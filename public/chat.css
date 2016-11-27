@@ -102,6 +102,7 @@
 .messageDisplayName {
     display: inline-block;
     font-weight: bold;
+    vertical-align: top;
 }
 
 .messageLine {
@@ -111,6 +112,7 @@
 .messageText {
     display: inline-block;
     margin-left: 10px;
+    vertical-align: top;
 }
 
 .participant {

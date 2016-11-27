@@ -62,10 +62,12 @@ var setupWebSocketClient = function($scope) {
                     break;
 
                 case 'M':
+                    var messageText = parts[2];
+                    messageText = messageText.replace(/\n/g, '<br>');
                     var snippet =
                         '<div class="messageLine">' +
                           '<div class="messageDisplayName">' + parts[1] + '</div>' +
-                          '<div class="messageText">' + parts[2] + '</div>' +
+                          '<div class="messageText">' + messageText + '</div>' +
                         '</div>';
                     var messagesArea = $('.messagesArea');
                     messagesArea.html(messagesArea.html() + snippet);
