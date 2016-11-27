@@ -1,0 +1,15 @@
+{
+  "name": "kitura-chat-server",
+  "version": "0.1.0",
+  "description": "Kitura-WebSocket based chat server",
+  "dependencies": {
+    "angular": "~1.5.9",
+    "jquery": "~2.1.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git@github.ibm.com:IBM-Swift/Kitura-Chat-Server.git"
+  },
+  "author": "Shmuel Kallner"
+}
