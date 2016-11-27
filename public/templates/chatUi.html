@@ -14,7 +14,8 @@
     <div class="inputAreaSplitter"></div>
 
     <div class="inputArea">
-        <textarea style="height: 100%; width: 100%;"></textarea>
+        <textarea id="inputAreaField" style="height: 100%; width: 100%;"
+                  ng-keydown="inputAreaInput($event)"></textarea>
     </div>
 
     <div class="coverFrame"></div>

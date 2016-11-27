@@ -99,6 +99,16 @@
     padding: 10px;
 }
 
+.messageDisplayName {
+    display: inline-block;
+    font-weight: bold;
+}
+
+.messageText {
+    display: inline-block;
+    margin-left: 10px;
+}
+
 .participant {
     display: inline-block;
     margin: 5px 5px 0 0;
