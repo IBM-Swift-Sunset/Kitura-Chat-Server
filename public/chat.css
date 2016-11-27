@@ -115,6 +115,13 @@
     vertical-align: top;
 }
 
+.messageTime {
+    display: inline-block;
+    color: #777;
+    vertical-align: top;
+    float: right;
+}
+
 .participant {
     display: inline-block;
     margin: 5px 5px 0 0;
