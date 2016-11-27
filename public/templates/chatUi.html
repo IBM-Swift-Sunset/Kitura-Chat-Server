@@ -9,11 +9,26 @@
 
     <div class="splitter"></div>
 
-    <div class="messagesArea" style="border:2px solid purple;"></div>
+    <div class="messagesArea"></div>
 
     <div class="inputAreaSplitter"></div>
 
     <div class="inputArea">
         <textarea style="height: 100%; width: 100%;"></textarea>
+    </div>
+
+    <div class="coverFrame"></div>
+
+    <div class="displayNameArea">
+        <div>Please enter your display name to be used in the chat</div>
+        <form id="displayNameForm" >
+            <input type="text" ng-model="displayName" style="margin-top: 20px;"/>
+            <div style="margin-top: 20px;">
+                <button ng-click="displayNameEntered()" ng-disabled="displayName.length == 0"
+                        style="background-color: #0099e7; color: white;">
+                    OK
+                </button>
+            </div>
+        </form>
     </div>
 </div>

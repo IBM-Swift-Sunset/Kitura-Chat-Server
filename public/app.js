@@ -25,12 +25,17 @@ utilities.resizeUI = function() {
         var messagesArea = $('.messagesArea');
         var inputAreaSplitter = $('.inputAreaSplitter');
         var footerBar = $('.footerBar');
+        var coverFrame = $('.coverFrame')
 
         splitter.height(totalHeight - titleBar.height() - footerBar.height() - 30);
         messagesArea.width(totalWidth - participantsArea.width() - splitter.width() - 60);
         messagesArea.height(inputAreaSplitter.offset().top - messagesArea.offset().top - 30);
         $('.inputArea').width(totalWidth - participantsArea.width() - splitter.width() - 60);
         inputAreaSplitter.width(totalWidth-participantsArea.width()-splitter.width() - 40);
+
+        coverFrame.height(totalHeight - titleBar.height() - footerBar.height());
+        coverFrame.offset({top: titleBar.height(), left: 0});
+        $('.displayNameArea').offset({top: totalHeight * .40, left: totalWidth * .40});
     };
 
 

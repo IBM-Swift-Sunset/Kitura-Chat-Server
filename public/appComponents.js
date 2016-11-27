@@ -18,8 +18,13 @@ var app = angular.module('chat-client', []);
 app.controller("chat-controller", function($scope) {
     $scope.participants = [ {displayName: "Shmuel", typing: true},
                             {displayName: "Ploni", typing: false},
-                            {displayName: "Almoni", typing: false} ]
-    $scope.displayName = "Testing 1 2 3, testing"
+                            {displayName: "Almoni", typing: false} ];
+    $scope.displayName = "";
+
+    $scope.displayNameEntered = function() {
+        $('.coverFrame').hide();
+        $('.displayNameArea').hide();
+    };
 })
 
 app.directive("chatUi", function() {

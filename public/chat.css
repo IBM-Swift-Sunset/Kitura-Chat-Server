@@ -20,6 +20,21 @@
      height:100%;
  }
 
+ .coverFrame {
+     z-index: 295;
+     position: absolute;
+     background-color: #555;
+     opacity: .5;
+     width: 100%;
+ }
+
+.displayNameArea {
+    z-index: 300;
+    position: absolute;
+    background-color: white;
+    padding: 20px;
+    border: 5px solid #555;
+}
 
 .documentContents {
     padding: 30px 20px 60px; /* 60px = Height of footerBar */
