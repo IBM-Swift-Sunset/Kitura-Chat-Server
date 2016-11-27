@@ -104,6 +104,10 @@
     font-weight: bold;
 }
 
+.messageLine {
+    margin-bottom: 5px;
+}
+
 .messageText {
     display: inline-block;
     margin-left: 10px;
