@@ -64,8 +64,8 @@ class ChatService: WebSocketService {
         let messageToForward = String(message.characters.dropFirst(2))
         
         if messageType == "M" || messageType == "T" || messageType == "S" {
-            if let (clientName, _) = clients[from.id] {
-                echo(message: "\(messageType):\(clientName):\(messageToForward)")
+            if let (_, _) = clients[from.id] {
+                echo(message: message)
             }
         }
         else if messageType == "C" {
