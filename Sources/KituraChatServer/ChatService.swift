@@ -38,7 +38,11 @@ class ChatService: WebSocketService {
     ///                    disconnected from this service.
     /// - Paramater reason: The `WebSocketCloseReasonCode` that describes why the client disconnected.
     public func disconnected(client: WebSocketClient, reason: WebSocketCloseReasonCode) {
-        clients.removeValue(forKey: client.id)
+        if let disconnectedClientdata = clients.removeValue(forKey: client.id) {
+            for (_, (_, from)) in clients {
+                from.send(message: "D:" + disconnectedClientdata.0)
+            }
+        }
     }
     
     /// Called when a WebSocket client sent a binary message to this service.
@@ -61,7 +65,7 @@ class ChatService: WebSocketService {
         
         guard let messageType = message.characters.first else { return }
         
-        let messageToForward = String(message.characters.dropFirst(2))
+        let displayName = String(message.characters.dropFirst(2))
         
         if messageType == "M" || messageType == "T" || messageType == "S" {
             if let (_, _) = clients[from.id] {
@@ -69,12 +73,16 @@ class ChatService: WebSocketService {
             }
         }
         else if messageType == "C" {
-            guard messageToForward.characters.count > 0 else {
+            guard displayName.characters.count > 0 else {
                 from.close(reason: .invalidDataContents, description: "Connect message must have client's name")
                 return
             }
             
-            clients[from.id] = (messageToForward, from)
+            for (_, (clientName, _)) in clients {
+                from.send(message: "C:" + clientName)
+            }
+            
+            clients[from.id] = (displayName, from)
             
             echo(message: message)
         }
