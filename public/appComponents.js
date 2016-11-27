@@ -37,12 +37,33 @@ var setupWebSocketClient = function($scope) {
             switch(parts[0]) {
                 case 'C':
                     $scope.participants.push({displayName: parts[1], typing: false});
+                    $scope.participants.sort(function(a, b) {
+                        if (a.displayName > b.displayName) {
+                            return 1
+                        }
+                        else if (a.displayName < b.displayName) {
+                            return -1
+                        }
+                        else {
+                            return 0
+                        }
+                    });
                     $scope.$apply();
+                    break;
+
+                case 'D':
+                    for (var i=0  ;  i < $scope.participants.length  ;  i++) {
+                        if (parts[1] == $scope.participants[i].displayName) {
+                            $scope.participants.splice(i, 1);
+                            $scope.$apply();
+                            break;
+                        }
+                    }
                     break;
 
                 case 'M':
                     var snippet =
-                        '<div>' +
+                        '<div class="messageLine">' +
                           '<div class="messageDisplayName">' + parts[1] + '</div>' +
                           '<div class="messageText">' + parts[2] + '</div>' +
                         '</div>';
@@ -60,7 +81,7 @@ var setupWebSocketClient = function($scope) {
 var app = angular.module('chat-client', []);
 
 app.controller("chat-controller", function($scope) {
-    $scope.participants = [ {displayName: "Shmuel", typing: true} ];
+    $scope.participants = [];
     $scope.displayName = "";
 
     $scope.displayNameEntered = function() {
@@ -76,6 +97,7 @@ app.controller("chat-controller", function($scope) {
             var inputAreaField = $('#inputAreaField');
             var text = inputAreaField.val();
             $scope.client.send('M:' + $scope.displayName + ':' + text);
+            event.preventDefault();
             inputAreaField.val('');
         }
     }
