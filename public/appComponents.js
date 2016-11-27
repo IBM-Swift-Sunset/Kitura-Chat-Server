@@ -13,18 +13,72 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 */
+(function() {
+
+var setupWebSocketClient = function($scope) {
+    var wsProtocol = location.protocol == 'http:' ? 'ws' : 'wss'
+    var client = new WebSocket(wsProtocol + '://' + location.host + '/kitura-chat', 'chat');
+
+    client.onerror =  function(error) {
+        alert('Connect Error: ' + error.toString());
+    };
+
+    client.onopen = function() {
+        client.send('C:'+ $scope.displayName)
+    };
+
+    client.onclose = function() {
+        alert('Chat closed')
+    };
+
+    client.onmessage = function(event) {
+        var parts = event.data.split(':');
+        if (parts.length > 1) {
+            switch(parts[0]) {
+                case 'C':
+                    $scope.participants.push({displayName: parts[1], typing: false});
+                    $scope.$apply();
+                    break;
+
+                case 'M':
+                    var snippet =
+                        '<div>' +
+                          '<div class="messageDisplayName">' + parts[1] + '</div>' +
+                          '<div class="messageText">' + parts[2] + '</div>' +
+                        '</div>';
+                    var messagesArea = $('.messagesArea');
+                    messagesArea.html(messagesArea.html() + snippet);
+                    break;
+            }
+        }
+    };
+
+    return client;
+}
+
+
 var app = angular.module('chat-client', []);
 
 app.controller("chat-controller", function($scope) {
-    $scope.participants = [ {displayName: "Shmuel", typing: true},
-                            {displayName: "Ploni", typing: false},
-                            {displayName: "Almoni", typing: false} ];
+    $scope.participants = [ {displayName: "Shmuel", typing: true} ];
     $scope.displayName = "";
 
     $scope.displayNameEntered = function() {
         $('.coverFrame').hide();
         $('.displayNameArea').hide();
+
+        $scope.client = setupWebSocketClient($scope);
     };
+
+    $scope.inputAreaInput = function(event) {
+        var key = event.key || event.keyCode;
+        if (key == 'Enter' && !event.cntrlKey && !event.shiftKey) {
+            var inputAreaField = $('#inputAreaField');
+            var text = inputAreaField.val();
+            $scope.client.send('M:' + $scope.displayName + ':' + text);
+            inputAreaField.val('');
+        }
+    }
 })
 
 app.directive("chatUi", function() {
@@ -43,3 +97,5 @@ app.directive("chatParticipants", function() {
         templateUrl: "templates/chatParticipants.html"
     }
 })
+
+})()
