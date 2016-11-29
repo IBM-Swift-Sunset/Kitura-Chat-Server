@@ -245,3 +245,26 @@
     margin: 18px 0 0 16px;
     vertical-align: top;
 }
+
+.leftTriangle, .rightTriangle, .rightOverlayTriangle {
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 10px;
+}
+
+.leftTriangle {
+    border-right: 10px solid #d8eaff;
+}
+
+.rightTriangle {
+    border-left: 10px solid #bab9b9;
+}
+
+.rightOverlayTriangle {
+    border-left: 10px solid #f7f7f8;
+    margin-left: -12px;   /* two pixels more than the width */
+}

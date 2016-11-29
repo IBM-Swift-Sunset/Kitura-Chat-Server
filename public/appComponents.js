@@ -28,7 +28,7 @@ var displayMessage = function($scope, displayName, messageText) {
 
     var messageBox =
         '<div class="' + (localUser ? 'messagelocalUserBox' : 'messageRemoteUserBox') + '"' +
-              ' style="width:' + ($('.messagesArea').width()-36-borderSpace) + 'px;"' + '>' +
+              ' style="width:' + ($('.messagesArea').width()-43-borderSpace) + 'px;"' + '>' +
           '<div>' +
             '<div class="messageDisplayName">' + displayName + '</div>' +
             '<div class="messageTime">' + time + '</div>' +
@@ -38,12 +38,16 @@ var displayMessage = function($scope, displayName, messageText) {
 
     var initialsCircle =
         '<div class="messageCircle ' + (localUser ? 'localUserText' : 'remoteUserText') + '"' +
-                   'style="' + (localUser ? 'margin-right: 6px;' : 'margin-left: 6px;' ) + '"' +
+                   'style="' + (localUser ? 'margin-right: 3px;' : 'margin-left: 3px;' ) + '"' +
                    '>' + $scope.participantInitials[displayName] + '</div>'
+
+    var initialsTriangle = '<div class="' + (localUser ? 'leftTriangle' : 'rightTriangle') + '"></div>';
+    var rightOverlayTriangle = '<div class="rightOverlayTriangle"></div>';
 
     var snippet =
         '<div class="messageLine">' +
-          (localUser ? (initialsCircle + messageBox) : (messageBox + initialsCircle)) +
+          (localUser ? (initialsCircle + initialsTriangle + messageBox) :
+                            (messageBox + initialsTriangle + rightOverlayTriangle + initialsCircle)) +
         '</div>';
 
     var messagesArea = $('.messagesArea');

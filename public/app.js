@@ -29,8 +29,8 @@ utilities.resizeUI = function() {
         participantsArea.height(totalHeight - titleBar.height() - footerBar.height() - 2);
         messagesArea.width(totalWidth - participantsArea.width() - 60);
         messagesArea.height(inputArea.offset().top - messagesArea.offset().top - 30);
-        $('.messagelocalUserBox').width(messagesArea.width()-36);
-        $('.messageRemoteUserBox').width(messagesArea.width()-40);
+        $('.messagelocalUserBox').width(messagesArea.width()-43);
+        $('.messageRemoteUserBox').width(messagesArea.width()-47);
         inputArea.width(totalWidth - participantsArea.width() - 20);
 
         coverFrame.height(totalHeight - titleBar.height() - footerBar.height());
