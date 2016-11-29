@@ -95,46 +95,66 @@
     position: absolute;
     left: 250px;
     top: 60px;
-    padding: 10px;
+    padding: 15px 30px;
     background-color: #f7f7f8;
     overflow-y: scroll;
 }
 
-.messageCircle, .messageLocalUserCircle {
-    width: 30px;
-    height: 30px;
-    border-radius: 15px;
+.messagelocalUserBox, .messageRemoteUserBox {
+    display: inline-block;
+    border-radius: 5px;
+}
+
+.messagelocalUserBox {
+    background-color: #d8eaff;
+}
+
+.messageRemoteUserBox {
+    border: solid 1px #bababa;
 }
 
 .messageCircle {
-    border: solid 1px #bab9b9;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    line-height: 30px;
+    vertical-align: top;
+    text-align: center;
 }
 
 .messageDisplayName {
     display: inline-block;
-    font-weight: bold;
-    vertical-align: top;
+    margin: 10px 0 0 15px;
 }
 
 .messageLine {
-    margin-bottom: 5px;
+    margin-bottom: 25px;
+    width: 100%;
 }
 
 .messageText {
-    display: inline-block;
-    margin-left: 10px;
+    margin: 9px 69px 14px 15px;
     vertical-align: top;
+    color: #4a4a4a;
 }
 
 .messageTime {
     display: inline-block;
-    color: #777;
-    vertical-align: top;
     float: right;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: right;
+    color: #9b9b9b;
+    margin: 13px 9px 0 0;
 }
 
 .localUserText {
     background-color: #d8eaff;
+}
+
+.remoteUserText {
+    border: solid 1px #bab9b9;
 }
 
 .participant {
@@ -157,7 +177,7 @@
     border: solid 1px #d8d8d8;
 }
 
-.participantCircle, .localUserCircle {
+.participantCircle {
     display: inline-block;
     width: 40px;
     height: 40px;
@@ -166,10 +186,6 @@
     font-size: 16px;
     font-weight: 300;
     text-align: center;
-}
-
-.participantCircle {
-    border: solid 1px #bab9b9;
 }
 
 .participantsCount {

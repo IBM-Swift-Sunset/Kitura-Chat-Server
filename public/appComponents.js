@@ -22,14 +22,33 @@ var displayMessage = function($scope, displayName, messageText) {
     var seconds = date.getSeconds();
     var time = date.getHours() + ':' + (minutes < 10 ? '0' : '') + minutes +
                     ':' + (seconds < 10 ? '0' : '') + seconds;
+
+    var localUser = displayName == $scope.displayName;
+    var borderSpace = localUser ? 0 : 4;
+
+    var messageBox =
+        '<div class="' + (localUser ? 'messagelocalUserBox' : 'messageRemoteUserBox') + '"' +
+              ' style="width:' + ($('.messagesArea').width()-36-borderSpace) + 'px;"' + '>' +
+          '<div>' +
+            '<div class="messageDisplayName">' + displayName + '</div>' +
+            '<div class="messageTime">' + time + '</div>' +
+          '</div>' +
+          '<div class="messageText">' + messageText + '</div>' +
+        '</div>';
+
+    var initialsCircle =
+        '<div class="messageCircle ' + (localUser ? 'localUserText' : 'remoteUserText') + '"' +
+                   'style="' + (localUser ? 'margin-right: 6px;' : 'margin-left: 6px;' ) + '"' +
+                   '>' + $scope.participantInitials[displayName] + '</div>'
+
     var snippet =
         '<div class="messageLine">' +
-          '<div class="messageDisplayName">' + displayName + '</div>' +
-          '<div class="messageText">' + messageText + '</div>' +
-          '<div class="messageTime">' + time + '</div>' +
+          (localUser ? (initialsCircle + messageBox) : (messageBox + initialsCircle)) +
         '</div>';
+
     var messagesArea = $('.messagesArea');
     messagesArea.html(messagesArea.html() + snippet);
+
     $scope.hasMessages = true;
 };
 
@@ -147,7 +166,8 @@ app.controller("chat-controller", function($scope) {
     $scope.displayNameEntered = function() {
         $('.coverFrame').hide();
         $('.displayNameArea').hide();
-        $scope.initials = initials($scope.displayName)
+        $scope.initials = initials($scope.displayName);
+        $scope.participantInitials[$scope.displayName] = $scope.initials;
 
         try {
             $scope.client = setupWebSocketClient($scope);
