@@ -195,7 +195,7 @@
 .participantTyping {
     vertical-align: middle;
     float: right;
-    margin-top: 12px;
+    margin: 12px 16px 0 0;
 }
 
 .titleBar {
