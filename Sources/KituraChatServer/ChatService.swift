@@ -22,6 +22,8 @@ import KituraWebSocket
 
 class ChatService: WebSocketService {
     
+    private let clientsLock = DispatchSemaphore(value: 1)
+    
     private var clients = [String: (String, WebSocketClient)]()
     
     /// Called when a WebSocket client connects to this service.
@@ -38,11 +40,13 @@ class ChatService: WebSocketService {
     ///                    disconnected from this service.
     /// - Paramater reason: The `WebSocketCloseReasonCode` that describes why the client disconnected.
     public func disconnected(client: WebSocketClient, reason: WebSocketCloseReasonCode) {
+        lockClientsLock()
         if let disconnectedClientdata = clients.removeValue(forKey: client.id) {
             for (_, (_, from)) in clients {
                 from.send(message: "D:" + disconnectedClientdata.0)
             }
         }
+        unlockClientsLock()
     }
     
     /// Called when a WebSocket client sent a binary message to this service.
@@ -52,7 +56,10 @@ class ChatService: WebSocketService {
     ///                    sent the message to this service
     public func received(message: Data, from: WebSocketClient) {
         from.close(reason: .invalidDataType, description: "Kitura-Chat-Server only accepts text messages")
+        
+        lockClientsLock()
         clients.removeValue(forKey: from.id)
+        unlockClientsLock()
     }
     
     /// Called when a WebSocket client sent a text message to this service.
@@ -68,7 +75,11 @@ class ChatService: WebSocketService {
         let displayName = String(message.characters.dropFirst(2))
         
         if messageType == "M" || messageType == "T" || messageType == "S" {
-            if let (_, _) = clients[from.id] {
+            lockClientsLock()
+            let clientInfo = clients[from.id]
+            unlockClientsLock()
+            
+            if  clientInfo != nil {
                 echo(message: message)
             }
         }
@@ -78,25 +89,41 @@ class ChatService: WebSocketService {
                 return
             }
             
+            lockClientsLock()
             for (_, (clientName, _)) in clients {
                 from.send(message: "C:" + clientName)
             }
             
             clients[from.id] = (displayName, from)
+            unlockClientsLock()
             
             echo(message: message)
         }
         else {
             from.close(reason: .invalidDataContents, description: "First character of the message must be a C, M, S, or T")
-            if let (clientName, _) = clients.removeValue(forKey: from.id) {
+            lockClientsLock()
+            let clientInfo = clients.removeValue(forKey: from.id)
+            unlockClientsLock()
+            
+            if let (clientName, _) = clientInfo {
                 echo(message: "D:\(clientName)")
             }
         }
     }
     
     private func echo(message: String) {
+        lockClientsLock()
         for (_, (_, client)) in clients {
             client.send(message: message)
         }
+        unlockClientsLock()
+    }
+    
+    private func lockClientsLock() {
+        _ = clientsLock.wait(timeout: DispatchTime.distantFuture)
+    }
+    
+    private func unlockClientsLock() {
+        clientsLock.signal()
     }
 }
