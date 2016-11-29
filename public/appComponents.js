@@ -15,6 +15,24 @@
 */
 (function() {
 
+var displayMessage = function($scope, displayName, messageText) {
+    messageText = messageText.replace(/\n/g, '<br>');
+    var date = new Date();
+    var minutes = date.getMinutes();
+    var seconds = date.getSeconds();
+    var time = date.getHours() + ':' + (minutes < 10 ? '0' : '') + minutes +
+                    ':' + (seconds < 10 ? '0' : '') + seconds;
+    var snippet =
+        '<div class="messageLine">' +
+          '<div class="messageDisplayName">' + displayName + '</div>' +
+          '<div class="messageText">' + messageText + '</div>' +
+          '<div class="messageTime">' + time + '</div>' +
+        '</div>';
+    var messagesArea = $('.messagesArea');
+    messagesArea.html(messagesArea.html() + snippet);
+    $scope.hasMessages = true;
+};
+
 var initials = function(name) {
     var parts = name.split(' ');
     var result;
@@ -25,7 +43,49 @@ var initials = function(name) {
         result = parts[0].substring(0, 2);
     }
     return result.toUpperCase()
-}
+};
+
+var participantConnected = function($scope, displayName) {
+    if (displayName != $scope.displayName) {
+        var displayNameInitials = initials(displayName);
+        $scope.participantInitials[displayName] = displayNameInitials;
+        $scope.participants.push({displayName: displayName, initials: displayNameInitials, typing: false});
+        $scope.participants.sort(function(a, b) {
+            if (a.displayName > b.displayName) {
+                return 1
+            }
+            else if (a.displayName < b.displayName) {
+                return -1
+            }
+            else {
+                return 0
+            }
+        });
+        $scope.$apply();
+    }
+};
+
+var participantDisconnected = function($scope, displayName) {
+    for (var i=0  ;  i < $scope.participants.length  ;  i++) {
+        if (displayName == $scope.participants[i].displayName) {
+            $scope.participants.splice(i, 1);
+            $scope.$apply();
+            break;
+        }
+    }
+};
+
+var updateTypingState = function($scope, displayName, state) {
+    if (displayName != $scope.displayName) {
+        for (var i=0  ;  i < $scope.participants.length  ;  i++) {
+            if (displayName == $scope.participants[i].displayName) {
+                $scope.participants[i].typing = state;
+                $scope.$apply();
+                break;
+            }
+        }
+    }
+};
 
 var setupWebSocketClient = function($scope) {
     var wsProtocol = location.protocol == 'http:' ? 'ws' : 'wss'
@@ -48,80 +108,30 @@ var setupWebSocketClient = function($scope) {
         if (parts.length > 1) {
             switch(parts[0]) {
                 case 'C':
-                    if (parts[1] != $scope.displayName) {
-                        $scope.participants.push({displayName: parts[1], initials: initials(parts[1]), typing: false});
-                        $scope.participants.sort(function(a, b) {
-                            if (a.displayName > b.displayName) {
-                                return 1
-                            }
-                            else if (a.displayName < b.displayName) {
-                                return -1
-                            }
-                            else {
-                                return 0
-                            }
-                        });
-                        $scope.$apply();
-                    }
+                    participantConnected($scope, parts[1]);
                     break;
 
                 case 'D':
-                    for (var i=0  ;  i < $scope.participants.length  ;  i++) {
-                        if (parts[1] == $scope.participants[i].displayName) {
-                            $scope.participants.splice(i, 1);
-                            $scope.$apply();
-                            break;
-                        }
-                    }
+                    participantDisconnected($scope, parts[1]);
                     break;
 
                 case 'M':
-                    var messageText = parts[2];
-                    messageText = messageText.replace(/\n/g, '<br>');
-                    var date = new Date()
-                    var minutes = date.getMinutes()
-                    var seconds = date.getSeconds()
-                    var time = date.getHours() + ':' + (minutes < 10 ? '0' : '') + minutes +
-                                    ':' + (seconds < 10 ? '0' : '') + seconds
-                    var snippet =
-                        '<div class="messageLine">' +
-                          '<div class="messageDisplayName">' + parts[1] + '</div>' +
-                          '<div class="messageText">' + messageText + '</div>' +
-                          '<div class="messageTime">' + time + '</div>' +
-                        '</div>';
-                    var messagesArea = $('.messagesArea');
-                    messagesArea.html(messagesArea.html() + snippet);
+                    displayMessage($scope, parts[1], parts[2]);
                     break;
 
                 case 'S':
-                    if (parts[1] != $scope.displayName) {
-                        for (var i=0  ;  i < $scope.participants.length  ;  i++) {
-                            if (parts[1] == $scope.participants[i].displayName) {
-                                $scope.participants[i].typing = false;
-                                $scope.$apply();
-                                break;
-                            }
-                        }
-                    }
+                    updateTypingState($scope, parts[1], false);
                     break;
 
                 case 'T':
-                    if (parts[1] != $scope.displayName) {
-                        for (var i=0  ;  i < $scope.participants.length  ;  i++) {
-                            if (parts[1] == $scope.participants[i].displayName) {
-                                $scope.participants[i].typing = true;
-                                $scope.$apply();
-                                break;
-                            }
-                        }
-                    }
+                    updateTypingState($scope, parts[1], true);
                     break;
             }
         }
     };
 
     return client;
-}
+};
 
 
 var app = angular.module('chat-client', []);
@@ -130,6 +140,7 @@ app.controller("chat-controller", function($scope) {
     $scope.participants = [];
     $scope.participantInitials = {};
     $scope.displayName = "";
+    $scope.hasMessages = false;
     $scope.initials = "";
     $scope.isTyping = 0;
 
@@ -151,7 +162,6 @@ app.controller("chat-controller", function($scope) {
     };
 
     $scope.inputAreaInput = function(event) {
-        var key = event.key || event.keyCode;
         if ((event.key == 'Enter' || event.keyCode == 13) && !event.cntrlKey && !event.shiftKey) {
             typingStopped();
             var inputAreaField = $('#inputAreaField');
