@@ -21,12 +21,19 @@ utilities.resizeUI = function() {
 
         var titleBar = $('.titleBar');
         var participantsArea = $('.participantsArea');
+        var waitingMessage = $('#waitingMessage');
         var messagesArea = $('.messagesArea');
         var inputArea = $('.inputArea');
         var footerBar = $('.footerBar');
-        var coverFrame = $('.coverFrame')
+        var coverFrame = $('.coverFrame');
 
         participantsArea.height(totalHeight - titleBar.height() - footerBar.height() - 2);
+        var participantsSeparatorBottom = $('.participantsSeparator').offset().top +
+                                                    $('.participantsSeparator').height();
+        waitingMessage.offset({top: participantsSeparatorBottom +
+                                           (participantsArea.height() - waitingMessage.height() -
+                                                    participantsSeparatorBottom + titleBar.height()) / 2,
+                               left: (participantsArea.width()-waitingMessage.width())/2});
         messagesArea.width(totalWidth - participantsArea.width() - 60);
         messagesArea.height(inputArea.offset().top - messagesArea.offset().top - 30);
         $('.messagelocalUserBox').width(messagesArea.width()-43);

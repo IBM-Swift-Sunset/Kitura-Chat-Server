@@ -20,6 +20,32 @@
      height:100%;
  }
 
+ .clock {
+     border: 3px solid #000;
+     border-radius: 28px;
+     display: inline-block;
+     height: 52px;
+     width: 52px;
+ }
+
+ .clockHours {
+     background-color: #000;
+     display: inline-block;
+     height: 4px;
+     margin: 0 0 30px -47px;
+     transform: rotate(40deg);
+     width: 21px;
+ }
+
+ .clockMinutes {
+     background-color: #000;
+     display: inline-block;
+     height: 3px;
+     margin: 0 0 33px -16px;
+     transform: rotate(-40deg);
+     width: 29px;
+ }
+
  .coverFrame {
      z-index: 295;
      position: absolute;
@@ -279,4 +305,18 @@
 .rightOverlayTriangle {
     border-left: 10px solid #f7f7f8;
     margin-left: -12px;   /* two pixels more than the width */
+}
+
+.waitingForAddition {
+  width: 140px;
+  height: 51px;
+  margin-top: 10px;
+  opacity: 0.5;
+  font-family: HelveticaNeue;
+  font-size: 14px;
+  font-weight: 300;
+  font-style: normal;
+  font-stretch: normal;
+  text-align: center;
+  color: #000000;
 }
