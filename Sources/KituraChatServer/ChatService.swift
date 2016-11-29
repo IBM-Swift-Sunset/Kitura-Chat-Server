@@ -91,7 +91,7 @@ class ChatService: WebSocketService {
             
             lockClientsLock()
             for (_, (clientName, _)) in clients {
-                from.send(message: "C:" + clientName)
+                from.send(message: "c:" + clientName)
             }
             
             clients[from.id] = (displayName, from)

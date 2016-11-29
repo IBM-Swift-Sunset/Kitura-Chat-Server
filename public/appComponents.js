@@ -54,22 +54,18 @@ var displayMessage = function($scope, displayName, messageText) {
 
     var messagesArea = $('.messagesArea');
     messagesArea.html(messagesArea.html() + snippet);
-
-    $scope.hasMessages = true;
 };
 
 var addMessageParticipantLine = function($scope, displayName, joined) {
-    if ($scope.hasMessages || !joined) {
-        var snippet =
+    var snippet =
             '<div class="messageParticipantLine">' +
               '<span style="font-weight: 500;">' + displayName + '</span>' +
               '<span style="margin-left: 5px;">has ' + (joined ? 'joined' : 'left') + ' the chat</span>' +
               '<div class="messageTime" style="margin-top: 0;">' + formattedTime() + '</div>' +
             '</div>';
 
-        var messagesArea = $('.messagesArea');
-        messagesArea.html(messagesArea.html() + snippet);
-    }
+    var messagesArea = $('.messagesArea');
+    messagesArea.html(messagesArea.html() + snippet);
 }
 
 var initials = function(name) {
@@ -84,7 +80,7 @@ var initials = function(name) {
     return result.toUpperCase()
 };
 
-var participantConnected = function($scope, displayName) {
+var participantConnected = function($scope, displayName, initialConnect) {
     if (displayName != $scope.displayName) {
         var displayNameInitials = initials(displayName);
         $scope.participantInitials[displayName] = displayNameInitials;
@@ -101,7 +97,9 @@ var participantConnected = function($scope, displayName) {
             }
         });
         $scope.$apply();
-        addMessageParticipantLine($scope, displayName, true);
+        if (!initialConnect) {
+            addMessageParticipantLine($scope, displayName, true);
+        }
     }
 };
 
@@ -148,8 +146,12 @@ var setupWebSocketClient = function($scope) {
         var parts = event.data.split(':');
         if (parts.length > 1) {
             switch(parts[0]) {
+                case 'c':
+                    participantConnected($scope, parts[1], true);
+                    break;
+
                 case 'C':
-                    participantConnected($scope, parts[1]);
+                    participantConnected($scope, parts[1], false);
                     break;
 
                 case 'D':
@@ -181,7 +183,6 @@ app.controller("chat-controller", function($scope) {
     $scope.participants = [];
     $scope.participantInitials = {};
     $scope.displayName = "";
-    $scope.hasMessages = false;
     $scope.initials = "";
     $scope.isTyping = 0;
 
