@@ -152,7 +152,7 @@ app.controller("chat-controller", function($scope) {
 
     $scope.inputAreaInput = function(event) {
         var key = event.key || event.keyCode;
-        if (key == 'Enter' && !event.cntrlKey && !event.shiftKey) {
+        if ((event.key == 'Enter' || event.keyCode == 13) && !event.cntrlKey && !event.shiftKey) {
             typingStopped();
             var inputAreaField = $('#inputAreaField');
             var text = inputAreaField.val();
