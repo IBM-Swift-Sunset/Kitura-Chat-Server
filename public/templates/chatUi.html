@@ -1,20 +1,31 @@
 <div position="relative">
     <div class="participantsArea">
-        <div ng-repeat="participant in participants">
-            <div class="participant">{{participant.displayName}}</div>
-            <img src="images/kitura-bird.svg" height="15px" width="20px"
-                style="vertical-align: middle;" ng-show="participant.typing"/>
+        <div class="participant">
+            <div class="localUserCircle localUserText">{{initials}}</div>
+            <div class="participantText">{{displayName}}</div>
+        </div>
+        <div class="participantsSeparator"></div>
+        <img src="images/group.svg" height="30px" width="30px"
+             style="margin: 30px 0 0 20px"/>
+        <div class="participantsCount">
+            Online members ({{participants.length}})
+        </div>
+        <div style="overflow-y: scroll;">
+            <div ng-repeat="participant in participants">
+                <div class="participant">
+                    <div class="participantCircle">{{participant.initials}}</div>
+                    <div class="participantText">{{participant.displayName}}</div>
+                    <img src="images/kitura-bird.svg" height="15px" width="20px"
+                         class="participantTyping" ng-show="participant.typing"/>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="splitter"></div>
-
     <div class="messagesArea"></div>
 
-    <div class="inputAreaSplitter"></div>
-
-    <div class="inputArea">
-        <textarea id="inputAreaField" style="height: 100%; width: 100%;"
+    <div class="inputArea localUserText">
+        <textarea id="inputAreaField" class="inputAreaField localUserText"
                   ng-keydown="inputAreaInput($event)"></textarea>
     </div>
 

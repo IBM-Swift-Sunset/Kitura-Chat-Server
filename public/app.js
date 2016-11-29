@@ -21,17 +21,15 @@ utilities.resizeUI = function() {
 
         var titleBar = $('.titleBar');
         var participantsArea = $('.participantsArea');
-        var splitter = $('.splitter');
         var messagesArea = $('.messagesArea');
-        var inputAreaSplitter = $('.inputAreaSplitter');
+        var inputArea = $('.inputArea');
         var footerBar = $('.footerBar');
         var coverFrame = $('.coverFrame')
 
-        splitter.height(totalHeight - titleBar.height() - footerBar.height() - 30);
-        messagesArea.width(totalWidth - participantsArea.width() - splitter.width() - 60);
-        messagesArea.height(inputAreaSplitter.offset().top - messagesArea.offset().top - 30);
-        $('.inputArea').width(totalWidth - participantsArea.width() - splitter.width() - 60);
-        inputAreaSplitter.width(totalWidth-participantsArea.width()-splitter.width() - 40);
+        participantsArea.height(totalHeight - titleBar.height() - footerBar.height() - 2);
+        messagesArea.width(totalWidth - participantsArea.width() - 20);
+        messagesArea.height(inputArea.offset().top - messagesArea.offset().top - 20);
+        inputArea.width(totalWidth - participantsArea.width() - 20);
 
         coverFrame.height(totalHeight - titleBar.height() - footerBar.height());
         coverFrame.offset({top: titleBar.height(), left: 0});

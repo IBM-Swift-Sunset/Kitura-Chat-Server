@@ -48,7 +48,7 @@
 .footerBar {
     background: #0099e7;
     bottom: 0;
-    height: 60px;
+    height: 40px;
     left: 0;
     position: absolute;
     width: 100%;
@@ -59,7 +59,7 @@
     color: #ffffff;
     display: inline-block;
     font-family: HelveticaNeue-Light;
-    font-size: 25px;
+    font-size: 20px;
     font-weight: 300;
     text-decoration: none;
 }
@@ -67,36 +67,47 @@
 .footerSwift {
     float: right;
     text-align: right;
-    margin: 20px 40px 0 0;
+    margin: 10px 40px 0 0;
 }
 
 .footerText {
-    margin: 20px 5px 0 0;
+    margin: 10px 5px 0 40px;
+    vertical-align: top;
 }
 
 .inputArea {
-    height: 70px;
+    height: 60px;
     position: absolute;
-    left: 205px;
-    bottom: 60px;
-    padding: 10px 10px 20px;
+    left: 250px;
+    bottom: 40px;
+    padding: 10px;
 }
 
-.inputAreaSplitter {
-    height: 5px;
-    position: absolute;
-    left: 205px;
-    bottom: 160px;
-    background-color: #eee;
+.inputAreaField {
+    height: 100%;
+    width: 100%;
+    border: none;
 }
 
 .messagesArea {
     display: inline-block;
     vertical-align: top;
     position: absolute;
-    left: 205px;
-    top: 50px;
+    left: 250px;
+    top: 60px;
     padding: 10px;
+    background-color: #f7f7f8;
+    overflow-y: scroll;
+}
+
+.messageCircle, .messageLocalUserCircle {
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+}
+
+.messageCircle {
+    border: solid 1px #bab9b9;
 }
 
 .messageDisplayName {
@@ -122,9 +133,12 @@
     float: right;
 }
 
+.localUserText {
+    background-color: #d8eaff;
+}
+
 .participant {
-    display: inline-block;
-    margin: 5px 5px 0 0;
+    margin: 15px 0 0 16px;
 }
 
 .participantsArea {
@@ -132,31 +146,67 @@
     vertical-align: top;
     position: absolute;
     left: 0px;
-    top: 50px;
-    padding: 10px 10px 10px 20px;
-    width: 170px;
-    height: 80%;
-    color: blue;
-    font-weight: bold;
+    top: 60px;
+    width: 248px;
+    color: #000000;
+    font-family: HelveticaNeue;
+    font-style: normal;
+    font-stretch: normal;
+    font-size: 12px;
+    font-weight: 500;
+    border: solid 1px #d8d8d8;
 }
 
-.splitter {
-    width: 5px;
-    position: absolute;
-    left: 200px;
-    top: 60px;
-    background-color: #eee;
+.participantCircle, .localUserCircle {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: 300;
+    text-align: center;
+}
+
+.participantCircle {
+    border: solid 1px #bab9b9;
+}
+
+.participantsCount {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+    color: #9b9b9b;
+    margin: 38px 0 0 6px;
+}
+
+.participantsSeparator {
+    width: 249px;
+    height: 3px;
+    border: solid 1px #e5e4e4;
+    margin-top: 15px;
+}
+
+.participantText {
+    display: inline-block;
+    margin-left: 15px;
+}
+
+.participantTyping {
+    vertical-align: middle;
+    float: right;
+    margin-top: 12px;
 }
 
 .titleBar {
     background: #0099e7;
-    height: 40px;
+    height: 60px;
     width: 100%;
 }
 
 .titleIcon {
     height: 26px;
-    margin: 9px 0 0 19px;
+    margin: 17px 0 0 19px;
     width: 37px;
 }
 
@@ -164,7 +214,7 @@
     border: 1px solid #52b8ee;
     display: inline-block;
     height: 18px;
-    margin: 10px 0 0 17px;
+    margin: 20px 0 0 17px;
     vertical-align: top;
     width: 0;
 }
@@ -173,9 +223,9 @@
     color: #ffffff;
     display: inline-block;
     font-family: HelveticaNeue-Light;
-    font-size: 22px;
+    font-size: 27px;
     font-weight: 300;
     letter-spacing: 1px;
-    margin: 10px 0 0 16px;
+    margin: 18px 0 0 16px;
     vertical-align: top;
 }

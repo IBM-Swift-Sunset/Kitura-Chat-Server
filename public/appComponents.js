@@ -15,6 +15,18 @@
 */
 (function() {
 
+var initials = function(name) {
+    var parts = name.split(' ');
+    var result;
+    if (parts.length > 1) {
+        result = parts[0].substring(0, 1) + parts[1].substring(0, 1);
+    }
+    else {
+        result = parts[0].substring(0, 2);
+    }
+    return result.toUpperCase()
+}
+
 var setupWebSocketClient = function($scope) {
     var wsProtocol = location.protocol == 'http:' ? 'ws' : 'wss'
     var client = new WebSocket(wsProtocol + '://' + location.host + '/kitura-chat', 'chat');
@@ -36,19 +48,21 @@ var setupWebSocketClient = function($scope) {
         if (parts.length > 1) {
             switch(parts[0]) {
                 case 'C':
-                    $scope.participants.push({displayName: parts[1], typing: false});
-                    $scope.participants.sort(function(a, b) {
-                        if (a.displayName > b.displayName) {
-                            return 1
-                        }
-                        else if (a.displayName < b.displayName) {
-                            return -1
-                        }
-                        else {
-                            return 0
-                        }
-                    });
-                    $scope.$apply();
+                    if (parts[1] != $scope.displayName) {
+                        $scope.participants.push({displayName: parts[1], initials: initials(parts[1]), typing: false});
+                        $scope.participants.sort(function(a, b) {
+                            if (a.displayName > b.displayName) {
+                                return 1
+                            }
+                            else if (a.displayName < b.displayName) {
+                                return -1
+                            }
+                            else {
+                                return 0
+                            }
+                        });
+                        $scope.$apply();
+                    }
                     break;
 
                 case 'D':
@@ -80,21 +94,25 @@ var setupWebSocketClient = function($scope) {
                     break;
 
                 case 'S':
-                    for (var i=0  ;  i < $scope.participants.length  ;  i++) {
-                        if (parts[1] == $scope.participants[i].displayName) {
-                            $scope.participants[i].typing = false;
-                            $scope.$apply();
-                            break;
+                    if (parts[1] != $scope.displayName) {
+                        for (var i=0  ;  i < $scope.participants.length  ;  i++) {
+                            if (parts[1] == $scope.participants[i].displayName) {
+                                $scope.participants[i].typing = false;
+                                $scope.$apply();
+                                break;
+                            }
                         }
                     }
                     break;
 
                 case 'T':
-                    for (var i=0  ;  i < $scope.participants.length  ;  i++) {
-                        if (parts[1] == $scope.participants[i].displayName) {
-                            $scope.participants[i].typing = true;
-                            $scope.$apply();
-                            break;
+                    if (parts[1] != $scope.displayName) {
+                        for (var i=0  ;  i < $scope.participants.length  ;  i++) {
+                            if (parts[1] == $scope.participants[i].displayName) {
+                                $scope.participants[i].typing = true;
+                                $scope.$apply();
+                                break;
+                            }
                         }
                     }
                     break;
@@ -110,12 +128,15 @@ var app = angular.module('chat-client', []);
 
 app.controller("chat-controller", function($scope) {
     $scope.participants = [];
+    $scope.participantInitials = {};
     $scope.displayName = "";
+    $scope.initials = "";
     $scope.isTyping = 0;
 
     $scope.displayNameEntered = function() {
         $('.coverFrame').hide();
         $('.displayNameArea').hide();
+        $scope.initials = initials($scope.displayName)
 
         try {
             $scope.client = setupWebSocketClient($scope);
