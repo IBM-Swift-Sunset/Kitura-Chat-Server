@@ -133,6 +133,18 @@
     width: 100%;
 }
 
+.messageParticipantLine {
+    height: 10px;
+    width: 100%;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.05);
+    margin-bottom: 25px;
+    font-size: 11px;
+    font-weight: 300;
+    color: #4a4a4a;
+}
+
 .messageText {
     margin: 9px 69px 14px 15px;
     vertical-align: top;

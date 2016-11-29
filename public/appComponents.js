@@ -15,12 +15,15 @@
 */
 (function() {
 
-var displayMessage = function($scope, displayName, messageText) {
-    messageText = messageText.replace(/\n/g, '<br>');
+var formattedTime = function() {
     var date = new Date();
     var minutes = date.getMinutes();
-    var seconds = date.getSeconds();
-    var time = date.getHours() + ':' + (minutes < 10 ? '0' : '') + minutes;
+    return date.getHours() + ':' + (minutes < 10 ? '0' : '') + minutes;
+}
+
+var displayMessage = function($scope, displayName, messageText) {
+    messageText = messageText.replace(/\n/g, '<br>');
+
 
     var localUser = displayName == $scope.displayName;
     var borderSpace = localUser ? 0 : 4;
@@ -30,7 +33,7 @@ var displayMessage = function($scope, displayName, messageText) {
               ' style="width:' + ($('.messagesArea').width()-43-borderSpace) + 'px;"' + '>' +
           '<div>' +
             '<div class="messageDisplayName">' + displayName + '</div>' +
-            '<div class="messageTime">' + time + '</div>' +
+            '<div class="messageTime">' + formattedTime() + '</div>' +
           '</div>' +
           '<div class="messageText">' + messageText + '</div>' +
         '</div>';
@@ -54,6 +57,20 @@ var displayMessage = function($scope, displayName, messageText) {
 
     $scope.hasMessages = true;
 };
+
+var addMessageParticipantLine = function($scope, displayName, joined) {
+    if ($scope.hasMessages || !joined) {
+        var snippet =
+            '<div class="messageParticipantLine">' +
+              '<span style="font-weight: 500;">' + displayName + '</span>' +
+              '<span style="margin-left: 5px;">has ' + (joined ? 'joined' : 'left') + ' the chat</span>' +
+              '<div class="messageTime" style="margin-top: 0;">' + formattedTime() + '</div>' +
+            '</div>';
+
+        var messagesArea = $('.messagesArea');
+        messagesArea.html(messagesArea.html() + snippet);
+    }
+}
 
 var initials = function(name) {
     var parts = name.split(' ');
@@ -84,6 +101,7 @@ var participantConnected = function($scope, displayName) {
             }
         });
         $scope.$apply();
+        addMessageParticipantLine($scope, displayName, true);
     }
 };
 
@@ -92,6 +110,7 @@ var participantDisconnected = function($scope, displayName) {
         if (displayName == $scope.participants[i].displayName) {
             $scope.participants.splice(i, 1);
             $scope.$apply();
+            addMessageParticipantLine($scope, displayName, false);
             break;
         }
     }
