@@ -20,8 +20,7 @@ var displayMessage = function($scope, displayName, messageText) {
     var date = new Date();
     var minutes = date.getMinutes();
     var seconds = date.getSeconds();
-    var time = date.getHours() + ':' + (minutes < 10 ? '0' : '') + minutes +
-                    ':' + (seconds < 10 ? '0' : '') + seconds;
+    var time = date.getHours() + ':' + (minutes < 10 ? '0' : '') + minutes;
 
     var localUser = displayName == $scope.displayName;
     var borderSpace = localUser ? 0 : 4;
