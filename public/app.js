@@ -36,9 +36,20 @@ utilities.resizeUI = function() {
                                left: (participantsArea.width()-waitingMessage.width())/2});
         messagesArea.width(totalWidth - participantsArea.width() - 60);
         messagesArea.height(inputArea.offset().top - messagesArea.offset().top - 30);
-        $('.messagelocalUserBox').width(messagesArea.width()-43);
-        $('.messageRemoteUserBox').width(messagesArea.width()-47);
+
+        var boxWidth = $('.messagesArea').width()
+        if (boxWidth > 600) {
+            boxWidth = 600;
+        }
+        $('.messagelocalUserBox').width(boxWidth-43);
+        $('.messageRemoteUserBox').width(boxWidth-47);
+
         inputArea.width(totalWidth - participantsArea.width() - 20);
+        var inputAreaFieldWidth = inputArea.width() - 10;
+        if (inputAreaFieldWidth > 600) {
+            inputAreaFieldWidth = 600;
+        }
+        $('.inputAreaField').width(inputAreaFieldWidth);
 
         coverFrame.height(totalHeight - titleBar.height() - footerBar.height());
         coverFrame.offset({top: titleBar.height(), left: 0});

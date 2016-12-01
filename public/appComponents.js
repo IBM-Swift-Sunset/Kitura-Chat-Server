@@ -28,9 +28,14 @@ var displayMessage = function($scope, displayName, messageText) {
     var localUser = displayName == $scope.displayName;
     var borderSpace = localUser ? 0 : 4;
 
+    var boxWidth = $('.messagesArea').width()
+    if (boxWidth > 600) {
+        boxWidth = 600;
+    }
+
     var messageBox =
         '<div class="' + (localUser ? 'messagelocalUserBox' : 'messageRemoteUserBox') + '"' +
-              ' style="width:' + ($('.messagesArea').width()-43-borderSpace) + 'px;"' + '>' +
+              ' style="width:' + (boxWidth-43-borderSpace) + 'px;"' + '>' +
           '<div>' +
             '<div class="messageDisplayName">' + displayName + '</div>' +
             '<div class="messageTime">' + formattedTime() + '</div>' +
