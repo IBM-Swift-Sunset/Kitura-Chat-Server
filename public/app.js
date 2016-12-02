@@ -41,8 +41,9 @@ utilities.resizeUI = function() {
         if (boxWidth > 600) {
             boxWidth = 600;
         }
-        $('.messagelocalUserBox').width(boxWidth-43);
-        $('.messageRemoteUserBox').width(boxWidth-47);
+        $('.messagelocalUserBox').width(boxWidth-33);
+        $('.messageRemoteUserBox').width(boxWidth-37);
+        $('.messageParticipantLine').width(boxWidth);
 
         inputArea.width(totalWidth - participantsArea.width() - 20);
         var inputAreaFieldWidth = inputArea.width() - 10;

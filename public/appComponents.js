@@ -35,7 +35,7 @@ var displayMessage = function($scope, displayName, messageText) {
 
     var messageBox =
         '<div class="' + (localUser ? 'messagelocalUserBox' : 'messageRemoteUserBox') + '"' +
-              ' style="width:' + (boxWidth-43-borderSpace) + 'px;"' + '>' +
+              ' style="width:' + (boxWidth-33-borderSpace) + 'px;"' + '>' +
           '<div>' +
             '<div class="messageDisplayName">' + displayName + '</div>' +
             '<div class="messageTime">' + formattedTime() + '</div>' +
@@ -59,11 +59,19 @@ var displayMessage = function($scope, displayName, messageText) {
 
     var messagesArea = $('.messagesArea');
     messagesArea.html(messagesArea.html() + snippet);
+    var children = messagesArea.children();
+    children[children.length-1].scrollIntoView();
 };
 
 var addMessageParticipantLine = function($scope, displayName, joined) {
+    var boxWidth = $('.messagesArea').width()
+    if (boxWidth > 600) {
+        boxWidth = 600;
+    }
+
     var snippet =
-            '<div class="messageParticipantLine">' +
+            '<div class="messageParticipantLine"' +
+                            ' style="width:' + boxWidth + 'px;">' +
               '<span style="font-weight: 500;">' + displayName + '</span>' +
               '<span style="margin-left: 5px;">has ' + (joined ? 'joined' : 'left') + ' the chat</span>' +
               '<div class="messageTime" style="margin-top: 0;">' + formattedTime() + '</div>' +
@@ -71,6 +79,8 @@ var addMessageParticipantLine = function($scope, displayName, joined) {
 
     var messagesArea = $('.messagesArea');
     messagesArea.html(messagesArea.html() + snippet);
+    var children = messagesArea.children();
+    children[children.length-1].scrollIntoView();
 }
 
 var initials = function(name) {
@@ -164,7 +174,11 @@ var setupWebSocketClient = function($scope) {
                     break;
 
                 case 'M':
-                    displayMessage($scope, parts[1], parts[2]);
+                    var temp = ""
+                    for (var i=2 ;  i < parts.length  ;  i++) {
+                        temp += ":" + parts[i];
+                    }
+                    displayMessage($scope, parts[1], temp.substring(1));
                     break;
 
                 case 'S':
@@ -236,6 +250,7 @@ app.directive("chatUi", function() {
         templateUrl: "templates/chatUi.html",
         link: function(scope, element, attrs, controller) {
             utilities.resizeUI();
+            $('.inputAreaField').get()[0].focus();
         }
     }
 });
