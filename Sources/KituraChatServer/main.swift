@@ -35,7 +35,7 @@ router.all("/node_modules", middleware: StaticFileServer(path: "./node_modules")
 // Serve the files in the public directory for the web client
 router.all("/", middleware: StaticFileServer())
 
-WebSocket.register(service: ChatService(), onPath: "/kitura-chat")
+WebSocket.register(service: ChatService(), onPath: "kitura-chat")
 
 // Add HTTP Server to listen on port 8090
 Kitura.addHTTPServer(onPort: 8090, with: router)
