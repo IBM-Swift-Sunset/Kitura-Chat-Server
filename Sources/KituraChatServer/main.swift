@@ -29,16 +29,18 @@ let router = Router()
 // Using an implementation for a Logger
 HeliumLogger.use(.info)
 
-// Serve installed node modules
-router.all("/node_modules", middleware: StaticFileServer(path: "./node_modules"))
-
 // Serve the files in the public directory for the web client
 router.all("/", middleware: StaticFileServer())
 
 WebSocket.register(service: ChatService(), onPath: "kitura-chat")
 
-// Add HTTP Server to listen on port 8090
-Kitura.addHTTPServer(onPort: 8090, with: router)
+// Figure out what port we're suppose to listen on
+let envVars = ProcessInfo.processInfo.environment
+let portString: String = envVars["PORT"] ?? envVars["CF_INSTANCE_PORT"] ??  envVars["VCAP_APP_PORT"] ?? "8090"
+let port = Int(portString) ?? 8090
+
+// Add HTTP Server to listen on the appropriate port
+Kitura.addHTTPServer(onPort: port, with: router)
 
 // start the framework - the servers added until now will start listening
 Kitura.run()
