@@ -16,6 +16,7 @@
 
 // KituraChatServer is a very simple chat server
 
+import Dispatch
 import Foundation
 
 import KituraWebSocket
