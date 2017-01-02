@@ -56,11 +56,7 @@ class ChatService: WebSocketService {
     /// - Parameter client: The `WebSocketClient` object that represents the client that
     ///                    sent the message to this service
     public func received(message: Data, from: WebSocketClient) {
-        from.close(reason: .invalidDataType, description: "Kitura-Chat-Server only accepts text messages")
-        
-        lockClientsLock()
-        clients.removeValue(forKey: from.id)
-        unlockClientsLock()
+        invalidData(from: from, description: "Kitura-Chat-Server only accepts text messages")
     }
     
     /// Called when a WebSocket client sent a text message to this service.
@@ -101,14 +97,7 @@ class ChatService: WebSocketService {
             echo(message: message)
         }
         else {
-            from.close(reason: .invalidDataContents, description: "First character of the message must be a C, M, S, or T")
-            lockClientsLock()
-            let clientInfo = clients.removeValue(forKey: from.id)
-            unlockClientsLock()
-            
-            if let (clientName, _) = clientInfo {
-                echo(message: "D:\(clientName)")
-            }
+            invalidData(from: from, description: "First character of the message must be a C, M, S, or T")
         }
     }
     
@@ -118,6 +107,17 @@ class ChatService: WebSocketService {
             client.send(message: message)
         }
         unlockClientsLock()
+    }
+    
+    private func invalidData(from: WebSocketClient, description: String) {
+        from.close(reason: .invalidDataContents, description: description)
+        lockClientsLock()
+        let clientInfo = clients.removeValue(forKey: from.id)
+        unlockClientsLock()
+        
+        if let (clientName, _) = clientInfo {
+            echo(message: "D:\(clientName)")
+        }
     }
     
     private func lockClientsLock() {
