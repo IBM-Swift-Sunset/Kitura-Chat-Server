@@ -29,7 +29,7 @@ Once the server starts you can access the UI from a browser by going to the URL
 http://<b>hostname</b>:8090, where <b>hostname</b> is the host your server is running on.
 
 ### Working with the Kitura-Chat-Server's UI
-When the Web UI first loads, it asks for a display name that will used as your identity in
+When the Web UI first loads, it asks for a display name that will be used as your identity in
 the chat.
 
 As other users join the chat you will see their display names on the left side of the screen.
