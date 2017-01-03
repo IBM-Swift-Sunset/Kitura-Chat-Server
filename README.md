@@ -63,7 +63,7 @@ Bluemix is a hosting platform from IBM that makes it easy to deploy your app to 
 
    **Note** This step will take 3-5 minutes
 
-   You will see output from the deployment as it proceeds, when it is successfull you will see:
+   You will see output from the deployment as it proceeds, when it is successful you will see:
 
    ```
    1 of 1 instances running
@@ -113,7 +113,7 @@ cf ic group create -m 128 -desired 1 --name kitura-chat-server -p 8090 -n hostna
   - _namespacename_ is the name space name you chose for your account
   - _hostname_ is the virtual host name you want for your container group
 
-Once the container in the container group ghas started you can point a browser at http://hostname.mybluemix.net, where hostname is the host name you specified in the previous command.
- 
+Once the container in the container group has started you can point a browser at http://hostname.mybluemix.net, where hostname is the host name you specified in the previous command.
+
 ## License
 This library is licensed under Apache 2.0. Full license text is available in [LICENSE](LICENSE.txt).

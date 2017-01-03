@@ -34,7 +34,7 @@ router.all("/", middleware: StaticFileServer())
 
 WebSocket.register(service: ChatService(), onPath: "kitura-chat")
 
-// Figure out what port we're suppose to listen on
+// Figure out what port we should listen on
 let envVars = ProcessInfo.processInfo.environment
 let portString: String = envVars["PORT"] ?? envVars["CF_INSTANCE_PORT"] ??  envVars["VCAP_APP_PORT"] ?? "8090"
 let port = Int(portString) ?? 8090
@@ -42,5 +42,5 @@ let port = Int(portString) ?? 8090
 // Add HTTP Server to listen on the appropriate port
 Kitura.addHTTPServer(onPort: port, with: router)
 
-// start the framework - the servers added until now will start listening
+// Start the framework - the servers added until now will start listening
 Kitura.run()
