@@ -27,6 +27,15 @@ class ChatService: WebSocketService {
     
     private var connections = [String: (String, WebSocketConnection)]()
     
+    private enum MessageType: Character {
+        case clientInChat = "c"
+        case connected = "C"
+        case disconnected = "D"
+        case sentMessage = "M"
+        case stoppedTyping = "S"
+        case startedTyping = "T"
+    }
+    
     /// Called when a WebSocket client connects to the server and is connected to a specific
     /// `WebSocketService`.
     ///
@@ -45,7 +54,7 @@ class ChatService: WebSocketService {
         lockConnectionsLock()
         if let disconnectedConnectionData = connections.removeValue(forKey: connection.id) {
             for (_, (_, from)) in connections {
-                from.send(message: "D:" + disconnectedConnectionData.0)
+                from.send(message: "\(MessageType.disconnected.rawValue):" + disconnectedConnectionData.0)
             }
         }
         unlockConnectionsLock()
@@ -72,7 +81,8 @@ class ChatService: WebSocketService {
         
         let displayName = String(message.characters.dropFirst(2))
         
-        if messageType == "M" || messageType == "T" || messageType == "S" {
+        if messageType == MessageType.sentMessage.rawValue || messageType == MessageType.startedTyping.rawValue ||
+                       messageType == MessageType.stoppedTyping.rawValue {
             lockConnectionsLock()
             let connectionInfo = connections[from.id]
             unlockConnectionsLock()
@@ -81,7 +91,7 @@ class ChatService: WebSocketService {
                 echo(message: message)
             }
         }
-        else if messageType == "C" {
+        else if messageType == MessageType.connected.rawValue {
             guard displayName.characters.count > 0 else {
                 from.close(reason: .invalidDataContents, description: "Connect message must have client's name")
                 return
@@ -89,7 +99,7 @@ class ChatService: WebSocketService {
             
             lockConnectionsLock()
             for (_, (clientName, _)) in connections {
-                from.send(message: "c:" + clientName)
+                from.send(message: "\(MessageType.clientInChat.rawValue):" + clientName)
             }
             
             connections[from.id] = (displayName, from)
@@ -117,7 +127,7 @@ class ChatService: WebSocketService {
         unlockConnectionsLock()
         
         if let (clientName, _) = connectionInfo {
-            echo(message: "D:\(clientName)")
+            echo(message: "\(MessageType.disconnected.rawValue):\(clientName)")
         }
     }
     
