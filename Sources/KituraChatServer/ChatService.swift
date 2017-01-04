@@ -43,9 +43,9 @@ class ChatService: WebSocketService {
     /// - Paramater reason: The `WebSocketCloseReasonCode` that describes why the client disconnected.
     public func disconnected(connection: WebSocketConnection, reason: WebSocketCloseReasonCode) {
         lockConnectionsLock()
-        if let disconnectedClientData = connections.removeValue(forKey: connection.id) {
+        if let disconnectedConnectionData = connections.removeValue(forKey: connection.id) {
             for (_, (_, from)) in connections {
-                from.send(message: "D:" + disconnectedClientData.0)
+                from.send(message: "D:" + disconnectedConnectionData.0)
             }
         }
         unlockConnectionsLock()
