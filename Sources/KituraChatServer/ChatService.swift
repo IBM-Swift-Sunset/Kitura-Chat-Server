@@ -23,48 +23,49 @@ import KituraWebSocket
 
 class ChatService: WebSocketService {
     
-    private let clientsLock = DispatchSemaphore(value: 1)
+    private let connectionsLock = DispatchSemaphore(value: 1)
     
-    private var clients = [String: (String, WebSocketClient)]()
+    private var connections = [String: (String, WebSocketConnection)]()
     
-    /// Called when a WebSocket client connects to this service.
+    /// Called when a WebSocket client connects to the server and is connected to a specific
+    /// `WebSocketService`.
     ///
-    /// - Parameter client: The `WebSocketClient` object that represents the client that
-    ///                    connected to this service
-    public func connected(client: WebSocketClient) {
+    /// - Parameter connection: The `WebSocketConnection` object that represents the client's
+    ///                    connection to this `WebSocketService`
+    public func connected(connection: WebSocketConnection) {
         // Ignored
     }
     
-    /// Called when a WebSocket client disconnects from this service.
+    /// Called when a WebSocket client disconnects from the server.
     ///
-    /// - Parameter client: The `WebSocketClient` object that represents the client that
-    ///                    disconnected from this service.
+    /// - Parameter connection: The `WebSocketConnection` object that represents the connection that
+    ///                    was disconnected from this `WebSocketService`.
     /// - Paramater reason: The `WebSocketCloseReasonCode` that describes why the client disconnected.
-    public func disconnected(client: WebSocketClient, reason: WebSocketCloseReasonCode) {
-        lockClientsLock()
-        if let disconnectedClientData = clients.removeValue(forKey: client.id) {
-            for (_, (_, from)) in clients {
+    public func disconnected(connection: WebSocketConnection, reason: WebSocketCloseReasonCode) {
+        lockConnectionsLock()
+        if let disconnectedClientData = connections.removeValue(forKey: connection.id) {
+            for (_, (_, from)) in connections {
                 from.send(message: "D:" + disconnectedClientData.0)
             }
         }
-        unlockClientsLock()
+        unlockConnectionsLock()
     }
     
-    /// Called when a WebSocket client sent a binary message to this service.
+    /// Called when a WebSocket client sent a binary message to the server to this `WebSocketService`.
     ///
     /// - Parameter message: A Data struct containing the bytes of the binary message sent by the client.
-    /// - Parameter client: The `WebSocketClient` object that represents the client that
-    ///                    sent the message to this service
-    public func received(message: Data, from: WebSocketClient) {
+    /// - Parameter client: The `WebSocketConnection` object that represents the connection over which
+    ///                    the client sent the message to this `WebSocketService`
+    public func received(message: Data, from: WebSocketConnection) {
         invalidData(from: from, description: "Kitura-Chat-Server only accepts text messages")
     }
     
-    /// Called when a WebSocket client sent a text message to this service.
+    /// Called when a WebSocket client sent a text message to the server to this `WebSocketService`.
     ///
     /// - Parameter message: A String containing the text message sent by the client.
-    /// - Parameter client: The `WebSocketClient` object that represents the client that
-    ///                    sent the message to this service
-    public func received(message: String, from: WebSocketClient) {
+    /// - Parameter client: The `WebSocketConnection` object that represents the connection over which
+    ///                    the client sent the message to this `WebSocketService`
+    public func received(message: String, from: WebSocketConnection) {
         guard message.characters.count > 1 else { return }
         
         guard let messageType = message.characters.first else { return }
@@ -72,11 +73,11 @@ class ChatService: WebSocketService {
         let displayName = String(message.characters.dropFirst(2))
         
         if messageType == "M" || messageType == "T" || messageType == "S" {
-            lockClientsLock()
-            let clientInfo = clients[from.id]
-            unlockClientsLock()
+            lockConnectionsLock()
+            let connectionInfo = connections[from.id]
+            unlockConnectionsLock()
             
-            if  clientInfo != nil {
+            if  connectionInfo != nil {
                 echo(message: message)
             }
         }
@@ -86,13 +87,13 @@ class ChatService: WebSocketService {
                 return
             }
             
-            lockClientsLock()
-            for (_, (clientName, _)) in clients {
+            lockConnectionsLock()
+            for (_, (clientName, _)) in connections {
                 from.send(message: "c:" + clientName)
             }
             
-            clients[from.id] = (displayName, from)
-            unlockClientsLock()
+            connections[from.id] = (displayName, from)
+            unlockConnectionsLock()
             
             echo(message: message)
         }
@@ -102,29 +103,29 @@ class ChatService: WebSocketService {
     }
     
     private func echo(message: String) {
-        lockClientsLock()
-        for (_, (_, client)) in clients {
-            client.send(message: message)
+        lockConnectionsLock()
+        for (_, (_, connection)) in connections {
+            connection.send(message: message)
         }
-        unlockClientsLock()
+        unlockConnectionsLock()
     }
     
-    private func invalidData(from: WebSocketClient, description: String) {
+    private func invalidData(from: WebSocketConnection, description: String) {
         from.close(reason: .invalidDataContents, description: description)
-        lockClientsLock()
-        let clientInfo = clients.removeValue(forKey: from.id)
-        unlockClientsLock()
+        lockConnectionsLock()
+        let connectionInfo = connections.removeValue(forKey: from.id)
+        unlockConnectionsLock()
         
-        if let (clientName, _) = clientInfo {
+        if let (clientName, _) = connectionInfo {
             echo(message: "D:\(clientName)")
         }
     }
     
-    private func lockClientsLock() {
-        _ = clientsLock.wait(timeout: DispatchTime.distantFuture)
+    private func lockConnectionsLock() {
+        _ = connectionsLock.wait(timeout: DispatchTime.distantFuture)
     }
     
-    private func unlockClientsLock() {
-        clientsLock.signal()
+    private func unlockConnectionsLock() {
+        connectionsLock.signal()
     }
 }
