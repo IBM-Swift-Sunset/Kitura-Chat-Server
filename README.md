@@ -1,5 +1,5 @@
 # Kitura-Chat-Server
-A simple chat server built using Kitura-WebSocket and Kitura.
+A sample chat server built using Kitura-WebSocket and Kitura.
 
 ## Description
 Kitura-Chat-Server enables multiple users to participate in a single group chat. A Web
@@ -14,10 +14,6 @@ When the Kitura-WebSocket API indicates to  the server that a user has disconnec
 message indicating this is forwarded to all of the remaining connected users.
 
 ## Getting started
-
-### Pre-requisites
-The Web UI uses AngularJS and jQuery and they need to be "installed" using NPM, the NodeJs
-Package Manager. To install them simply run `npm --install` from the public directory in Kitura-Chat-Server.
 
 ### Running the server locally
 To run the the server locally, simply:
@@ -43,7 +39,10 @@ Messages sent by users are shown in the upper area on the right. Each message is
 an indication of who sent it and when it was sent.
 
 ## Running on Bluemix
-Bluemix is a hosting platform from IBM that makes it easy to deploy your app to the cloud.
+Bluemix is a hosting platform from IBM that makes it easy to deploy your app to the cloud. On Bluemix
+one can deploy Swift servers in several ways. In this section I will describe deploying on Bluemix
+using the Runtime for Swift Cloud Foundry build pack. In the next section I will describe deploying
+on Bluemix using a Docker Container.
 
 1. If needed:
 
