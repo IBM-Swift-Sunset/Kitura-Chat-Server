@@ -22,7 +22,7 @@ To run the the server locally, simply:
   2. Run `.build/debug/KituraChatServer`, to execute the server.
 
 Once the server starts you can access the UI from a browser by going to the URL
-http://<b>hostname</b>:8090, where <b>hostname</b> is the host your server is running on.
+http://<b>hostname</b>:8080, where <b>hostname</b> is the host your server is running on.
 
 ### Working with the Kitura-Chat-Server's UI
 When the Web UI first loads, it asks for a display name that will be used as your identity in
@@ -106,7 +106,7 @@ cf ic build -t registry.ng.bluemix.net/namespacename/kitura-chat-server:latest -
 
  4. Create a container group to run your container, by running the command:
 ```
-cf ic group create -m 128 -desired 1 --name kitura-chat-server -p 8090 -n hostname -d mybluemix.net registry.ng.bluemix.net/namespacename/kitura-chat-server
+cf ic group create -m 128 -desired 1 --name kitura-chat-server -p 8080 -n hostname -d mybluemix.net registry.ng.bluemix.net/namespacename/kitura-chat-server
 ```
 **Where:**
   - _namespacename_ is the name space name you chose for your account

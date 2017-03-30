@@ -36,8 +36,8 @@ WebSocket.register(service: ChatService(), onPath: "kitura-chat")
 
 // Figure out what port we should listen on
 let envVars = ProcessInfo.processInfo.environment
-let portString = envVars["PORT"] ?? envVars["CF_INSTANCE_PORT"] ??  envVars["VCAP_APP_PORT"] ?? "8090"
-let port = Int(portString) ?? 8090
+let portString = envVars["PORT"] ?? envVars["CF_INSTANCE_PORT"] ??  envVars["VCAP_APP_PORT"] ?? "8080"
+let port = Int(portString) ?? 8080
 
 // Add HTTP Server to listen on the appropriate port
 Kitura.addHTTPServer(onPort: port, with: router)

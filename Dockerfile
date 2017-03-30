@@ -28,7 +28,7 @@ COPY . $HOME
 # Compile the application
 RUN swift build --configuration release
 
-EXPOSE 8090
+EXPOSE 8080
 
 CMD .build/release/KituraChatServer
 
