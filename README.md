@@ -1,4 +1,7 @@
 # Kitura-Chat-Server
+
+🚫 This project is no longer maintained.
+
 A sample chat server built using Kitura-WebSocket and Kitura.
 
 ## Description
