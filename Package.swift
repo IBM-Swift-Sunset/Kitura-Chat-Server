@@ -1,3 +1,4 @@
+// swift-tools-version:4.0
 /**
  * Copyright IBM Corporation 2016, 2017
  *
@@ -19,8 +20,11 @@ import PackageDescription
 let package = Package(
     name: "KituraChatServer",
     dependencies: [
-        .Package(url: "https://github.com/IBM-Swift/Kitura.git", majorVersion: 1, minor: 7),
-        .Package(url: "https://github.com/IBM-Swift/HeliumLogger.git", majorVersion: 1, minor: 7),
-        .Package(url: "https://github.com/IBM-Swift/Kitura-WebSocket", majorVersion: 0, minor: 8)
-    ]
+        .package(url: "https://github.com/IBM-Swift/Kitura.git", .upToNextMinor(from: "2.1.0")),
+        .package(url: "https://github.com/IBM-Swift/HeliumLogger.git", .upToNextMinor(from: "1.7.0")),
+        .package(url: "https://github.com/IBM-Swift/Kitura-WebSocket", .upToNextMinor(from: "1.0.1"))
+    ],
+    targets: [
+    .target(name: "KituraChatServer", dependencies: ["Kitura", "HeliumLogger", "Kitura-WebSocket"])
+        ]
 )
