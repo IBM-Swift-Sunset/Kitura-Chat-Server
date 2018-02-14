@@ -75,11 +75,11 @@ class ChatService: WebSocketService {
     /// - Parameter client: The `WebSocketConnection` object that represents the connection over which
     ///                    the client sent the message to this `WebSocketService`
     public func received(message: String, from: WebSocketConnection) {
-        guard message.characters.count > 1 else { return }
+        guard message.count > 1 else { return }
         
-        guard let messageType = message.characters.first else { return }
+        guard let messageType = message.first else { return }
         
-        let displayName = String(message.characters.dropFirst(2))
+        let displayName = String(message.dropFirst(2))
         
         if messageType == MessageType.sentMessage.rawValue || messageType == MessageType.startedTyping.rawValue ||
                        messageType == MessageType.stoppedTyping.rawValue {
@@ -92,7 +92,7 @@ class ChatService: WebSocketService {
             }
         }
         else if messageType == MessageType.connected.rawValue {
-            guard displayName.characters.count > 0 else {
+            guard displayName.count > 0 else {
                 from.close(reason: .invalidDataContents, description: "Connect message must have client's name")
                 return
             }

@@ -2,6 +2,8 @@
 
 🚫 This project is no longer maintained.
 
+**Notice:** This standalone app has been migrated to the [Kitura-Sample application](https://github.com/IBM-Swift/Kitura-Sample).
+
 A sample chat server built using Kitura-WebSocket and Kitura.
 
 ## Description
